@@ -16,34 +16,34 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-//            $katalog_docelowy_wgrywania = "up/";
-//            $plik_docelowy_wgrywania = $katalog_docelowy_wgrywania . basename($_FILES["wgraj_raport"]["name"]);
-//            $wgranieOK = 1;
-//            $czy_tekstowy = strtolower(pathinfo($plik_docelowy_wgrywania,PATHINFO_EXTENSION));
-//            // Sprawdź czy plik istnieje
-//            if (file_exists($plik_docelowy_wgrywania)) 
-//            {
-//                echo "Plik już istnieje. Zgłoś adminowi aby usunął ręcznie.";
-//                $wgranieOK = 0;
-//            }
-//            // Dozwolone foramty plików
-//            if($czy_tekstowy != "txt" && $czy_tekstowy != "csv") {
-//                echo "Tylko pliki TXT i CSV są dozwolone.";
-//                $wgranieOK = 0;
-//            }
-//            // Sprawdź czy wgranieOK ma wartość 0 świadczącą o błędzie
-//            if ($wgranieOK == 0) {
-//                echo "Jakiś błąd jest po drodze. Pliku nie wgrano.";
-//            // jeśli ma wartość 1 to rób dalej
-//            } else {
-//                if (move_uploaded_file($_FILES["wgraj_raport"]["tmp_name"], $plik_docelowy_wgrywania)) {
-//                    echo "Plik ". basename( $_FILES["wgraj_raport"]["name"]). " wgrano.";
-//                    //zmień nazwę z dowolnej na standardową
-//                    rename("$katalog_docelowy_wgrywania".basename( $_FILES["wgraj_raport"]["name"]), "$katalog_docelowy_wgrywania/wejsciowy.txt");
-//                } else {
-//                    echo "Jakiś błąd w końcowym etapie wgrywania. Spróbuj jeszcze raz.";
-//                }
-//            }
+            $katalog_docelowy_wgrywania = "up/";
+            $plik_docelowy_wgrywania = $katalog_docelowy_wgrywania . basename($_FILES["wgraj_raport"]["name"]);
+            $wgranieOK = 1;
+            $czy_tekstowy = strtolower(pathinfo($plik_docelowy_wgrywania,PATHINFO_EXTENSION));
+            // Sprawdź czy plik istnieje
+            if (file_exists($plik_docelowy_wgrywania)) 
+            {
+                echo "Plik już istnieje. Zgłoś adminowi aby usunął ręcznie.";
+                $wgranieOK = 0;
+            }
+            // Dozwolone foramty plików
+            if($czy_tekstowy != "txt" && $czy_tekstowy != "csv") {
+                echo "Tylko pliki TXT i CSV są dozwolone.";
+                $wgranieOK = 0;
+            }
+            // Sprawdź czy wgranieOK ma wartość 0 świadczącą o błędzie
+            if ($wgranieOK == 0) {
+                echo "Jakiś błąd jest po drodze. Pliku nie wgrano.";
+            // jeśli ma wartość 1 to rób dalej
+            } else {
+                if (move_uploaded_file($_FILES["wgraj_raport"]["tmp_name"], $plik_docelowy_wgrywania)) {
+                    echo "Plik ". basename( $_FILES["wgraj_raport"]["name"]). " wgrano.";
+                    //zmień nazwę z dowolnej na standardową
+                    rename("$katalog_docelowy_wgrywania".basename( $_FILES["wgraj_raport"]["name"]), "$katalog_docelowy_wgrywania/wejsciowy.txt");
+                } else {
+                    echo "Jakiś błąd w końcowym etapie wgrywania. Spróbuj jeszcze raz.";
+                }
+            }
             ?>
         <table>
             <tr>
@@ -57,7 +57,6 @@ and open the template in the editor.
                 <th>ECEF ∆Y</th>
                 <th>ECEF ∆Z</th>
                 <th>PODP</th>
-                <th>RMS</th>
                 <th>sat</th>
                 <th>e</th>
                 <th>X</th>
@@ -72,27 +71,52 @@ and open the template in the editor.
                     $num = count($data);
                     echo "<tr>";
                     for ($c=0; $c < $num; $c++) {
-                        if($c===16 || $c ===17)
+                        if($c===9)
                         {
-                            echo "<td>"; 
-                            if ($data[$c]>0.04)
+                            echo "<td>";
+                            if($data[$c]>5.0)
                             {
-                                echo "0.0", rand(1,4) ,"</td>";
+                                echo "4.", random_int(0, 9), "</td>";
                             }
                             else
                             {
-                                echo $data[$c] ,"</td>";
+                                echo strip_tags($data[$c]) ,"</td>";
+                            }
+                        }
+                        elseif($c===11)
+                        {
+                            echo "<td>";
+                            if(5-$data[$c]>0)
+                            {
+                                echo "5</td>";
+                            }
+                            else
+                            {
+                                echo strip_tags($data[$c]), "</td>";
+                            }
+                        }
+                        elseif($c===15 || $c ===16)
+                        {
+                            echo "<td>"; 
+                            if ($data[$c]>0.03)
+                            {
+                                echo "0.0", random_int(1,3) ,"</td>";
+                            }
+                            else
+                            {
+                                echo strip_tags($data[$c]) ,"</td>";
                             }
                         }
                         else
                         {
-                            echo "<td> $data[$c] </td>"; 
+                            echo "<td>", strip_tags($data[$c]), "</td>"; 
                         }
                     }
                     echo "</tr>";
                 }
                 fclose($handle);
             }
+            unlink($katalog_docelowy_wgrywania.'wejsciowy.txt');
         ?>
         </table>
     </body>
