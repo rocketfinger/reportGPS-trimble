@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Raport GPS ver. 0.0.1</title>
+        <title>Raport GPS ver. 0.0.3</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -16,9 +16,8 @@ and open the template in the editor.
                 Są dwa tryby pracy:
             <ol type="1">
                 <li>Prosty raport - generuje tylko porawki czasu, PDOP, mp, mh. Może wygenerować obserwacje dla 
-                    zadanego odcinka X-X lub Y-Y. <u><b>NIE generuje nowych obserwacji, np. dla osnowy</b></u></li>
-                <li>Złożony raport - generuje to co powyżej oraz z druiego pliku zaczytuje osnowę lub pikiety 
-                    i "mierzy" z odpowienimi wartościami</li>
+                    zadanego odcinka X-X lub Y-Y. <u><b>Generuje podwójne obserwacje dla osnowy</b></u></li>
+                <li>Złożony raport - generuje całkowicie nowy raport pomiaru</li>
             </ol></p>
         <p>Żaden z powyższych nie generuje nagłówków raportu! Należy je "dokleić" samemu.<br/></p>
         <p>Przed przystąpieniem do tworzenia raportów należy przygotować poprawnie pliki wejściowe.
@@ -26,7 +25,7 @@ and open the template in the editor.
         <p>Jaki raport chcesz wygenerować?
         <ol type="1">
             <li><a href="formularz_prosty.php">Prosty</a></li>
-            <li><a href="formularz_prosty.php">Złożony</a></li>
+            <li><a href="formularz_zlozony.php">Złożony</a></li>
         </ol></p>
         </div>
     </body>
