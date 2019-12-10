@@ -147,6 +147,17 @@ and open the template in the editor.
                     $tablica_pikiet[$j][3] = $dataczas->format('Y-m-d H:i:s');
                 }
             }
+            if ($i === $rozmiar_tablicy_pikiet - 1) {
+                if ($tablica_pikiet[$i][10] < 5) {
+                    $tablica_pikiet[$i][10] = 5;
+                } elseif ($tablica_pikiet[$i][10] > 10 and $tablica_pikiet[$i][10] < 29) {
+                    $tablica_pikiet[$i][10] = 30;
+                } elseif (preg_match("/osn/i", $tablica_pikiet[$i][16]) == 1) {
+                    $tablica_pikiet[$i][10] = 30;
+                } else {
+                    
+                }
+            }
         }
         for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
             if ($tablica_pikiet[$i][8] > 5.0) {
@@ -183,167 +194,164 @@ and open the template in the editor.
                     }
                 }
                 echo "</tr></table>";
-                if ($czy_jest_osnowa) {
-                    ?>
-                    <br/><h2>Tabela punktów uśrednionych:</h2>
-                    <table>
-                        <tr>
-                        <b>
-                            <th>Nr pkt</th>
-                            <th>x</th>
-                            <th>y</th>
-                            <th>h</th>
-                            <th>x'</th>
-                            <th>y'</th>
-                            <th>h'</th>
-                            <th>x sr</th>
-                            <th>y sr</th>
-                            <th>h sr</th>
-                            <th>mx</th>
-                            <th>my</th>
-                            <th>mh</th>
-                            <th>mp</th>
-                        </b>
-                        </tr>
-                        <?php
-                        for ($i = 1; $i < sizeof($tablica_pikiet); $i++) {
-                            if ($tablica_pikiet[$i - 1][1] === $tablica_pikiet[$i][1]) {
-                                echo "<tr><td>" . $tablica_pikiet[$i - 1][1] . "</td>";
-                                echo "<td>" . number_format($tablica_pikiet[$i - 1][11], 2, '.', '') . "</td>"
-                                . "<td>" . number_format($tablica_pikiet[$i - 1][12], 2, '.', '') . "</td>"
-                                . "<td>" . number_format($tablica_pikiet[$i - 1][13], 3, '.', '') . "</td>";
-                                echo "<td>" . number_format($tablica_pikiet[$i][11], 2, '.', '') . "</td>"
-                                . "<td>" . number_format($tablica_pikiet[$i][12], 2, '.', '') . "</td>"
-                                . "<td>" . number_format($tablica_pikiet[$i][13], 3, '.', '') . "</td>";
-                                echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][11] + $tablica_pikiet[$i][11]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
-                                echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][12] + $tablica_pikiet[$i][12]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
-                                echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][13] + $tablica_pikiet[$i][13]) / 2, 3, PHP_ROUND_HALF_EVEN), 3, '.', '') . "</td>";
-                                echo "<td>0.0" . random_int(0, 1) . "</td><td>0.0" . random_int(0, 1) . "</td><td>0.00" . random_int(0, 4) . "</td>"
-                                . "<td>0.0" . random_int(0, 1) . "</td></tr>";
+                /* $plik_eksportowy = './down/pikiety.txt';
+                  for($i=0; $i<$rozmiar_tablicy_pikiet; $i++){
+                  if()
+                  } */
+                // $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
+                //file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
+                break;
+            case 'x':
+                for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
+                    if ($tablica_pikiet[$i][11] > $_POST['Xmin'] and $tablica_pikiet[$i][11] < $_POST['Xmax']) {
+                        echo "<tr>";
+                        if ($tablica_pikiet[$i][2] <> 'RTN Fix') {
+                            $float = 1;
+                            array_push($punkty_float, $tablica_pikiet[$i][1]);
+                        }
+                        for ($j = 0; $j < 16; $j++) {
+                            if ($j === 4 or $j === 5 or $j === 6 or $j === 7 or $j === 13) {
+                                echo "<td>", number_format($tablica_pikiet[$i][$j], 3, '.', ''), "</td>";
+                            } elseif ($j === 11 or $j === 12 or $j === 14 or $j === 15) {
+                                echo "<td>", number_format($tablica_pikiet[$i][$j], 2, '.', ''), "</td>";
+                            } elseif ($j === 8) {
+                                echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
+                            } else {
+                                echo "<td>", $tablica_pikiet[$i][$j], "</td>";
                             }
                         }
-                        echo "</tr></table>";
                     }
-                    /* $plik_eksportowy = './down/pikiety.txt';
-                      for($i=0; $i<$rozmiar_tablicy_pikiet; $i++){
-                      if()
-                      } */
-                    // $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
-                    //file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
-                    break;
-                case 'x':
-                    for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
-                        if ($tablica_pikiet[$i][11] > $_POST['Xmin'] and $tablica_pikiet[$i][11] < $_POST['Xmax']) {
-                            echo "<tr>";
-                            if ($tablica_pikiet[$i][2] <> 'RTN Fix') {
-                                $float = 1;
-                                array_push($punkty_float, $tablica_pikiet[$i][1]);
-                            }
-                            for ($j = 0; $j < 16; $j++) {
-                                if ($j === 4 or $j === 5 or $j === 6 or $j === 7 or $j === 13) {
-                                    echo "<td>", number_format($tablica_pikiet[$i][$j], 3, '.', ''), "</td>";
-                                } elseif ($j === 11 or $j === 12 or $j === 14 or $j === 15) {
-                                    echo "<td>", number_format($tablica_pikiet[$i][$j], 2, '.', ''), "</td>";
-                                } elseif ($j === 8) {
-                                    echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
-                                } else {
-                                    echo "<td>", $tablica_pikiet[$i][$j], "</td>";
-                                }
+                }
+                echo "</tr></table>";
+                //if ($tablica_pikiet[12] > $_POST['Xmin'] and $tablica_pikiet[12] < $_POST['Xmax']) {
+                //echo "</tr>";
+                /* $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
+                  $plik_eksportowy = './down/pikiety.txt';
+                  file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX); */
+                //}
+                break;
+            case 'y':
+                for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
+                    if ($tablica_pikiet[$i][12] > $_POST['Ymin'] and $tablica_pikiet[$i][12] < $_POST['Ymax']) {
+                        echo "<tr>";
+                        if ($tablica_pikiet[$i][2] <> 'RTN Fix') {
+                            $float = 1;
+                            array_push($punkty_float, $tablica_pikiet[$i][1]);
+                        }
+                        for ($j = 0; $j < 16; $j++) {
+                            if ($j === 4 or $j === 5 or $j === 6 or $j === 7 or $j === 13) {
+                                echo "<td>", number_format($tablica_pikiet[$i][$j], 3, '.', ''), "</td>";
+                            } elseif ($j === 11 or $j === 12 or $j === 14 or $j === 15) {
+                                echo "<td>", number_format($tablica_pikiet[$i][$j], 2, '.', ''), "</td>";
+                            } elseif ($j === 8) {
+                                echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
+                            } else {
+                                echo "<td>", $tablica_pikiet[$i][$j], "</td>";
                             }
                         }
                     }
                     echo "</tr></table>";
-                    //if ($tablica_pikiet[12] > $_POST['Xmin'] and $tablica_pikiet[12] < $_POST['Xmax']) {
-                    //echo "</tr>";
-                    /* $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
-                      $plik_eksportowy = './down/pikiety.txt';
-                      file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX); */
-                    //}
-                    break;
-                case 'y':
-                    for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
-                        if ($tablica_pikiet[$i][12] > $_POST['Ymin'] and $tablica_pikiet[$i][12] < $_POST['Ymax']) {
-                            echo "<tr>";
-                            if ($tablica_pikiet[$i][2] <> 'RTN Fix') {
-                                $float = 1;
-                                array_push($punkty_float, $tablica_pikiet[$i][1]);
-                            }
-                            for ($j = 0; $j < 16; $j++) {
-                                if ($j === 4 or $j === 5 or $j === 6 or $j === 7 or $j === 13) {
-                                    echo "<td>", number_format($tablica_pikiet[$i][$j], 3, '.', ''), "</td>";
-                                } elseif ($j === 11 or $j === 12 or $j === 14 or $j === 15) {
-                                    echo "<td>", number_format($tablica_pikiet[$i][$j], 2, '.', ''), "</td>";
-                                } elseif ($j === 8) {
-                                    echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
-                                } else {
-                                    echo "<td>", $tablica_pikiet[$i][$j], "</td>";
-                                }
-                            }
-                        }
-                        echo "</tr></table>";
-                    }
-                    /* if ($tablica_pikiet[12] > $_POST['Ymin'] and $tablica_pikiet[12] < $_POST['Ymax']) {
-                      echo "</tr>";
-                      $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
-                      $plik_eksportowy = './down/pikiety.txt';
-                      file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
-                      } */
-
-                    break;
-                case 'xy';
-                    for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
-                        if ($tablica_pikiet[$i][11] > $_POST['Xmin'] and $tablica_pikiet[$i][11] < $_POST['Xmax']
-                                and $tablica_pikiet[$i][12] > $_POST['Ymin'] and $tablica_pikiet[$i][12] < $_POST['Ymax']) {
-                            echo "<tr>";
-                            if ($tablica_pikiet[$i][2] <> 'RTN Fix') {
-                                $float = 1;
-                                array_push($punkty_float, $tablica_pikiet[$i][1]);
-                            }
-                            for ($j = 0; $j < 16; $j++) {
-                                if ($j === 4 or $j === 5 or $j === 6 or $j === 7 or $j === 13) {
-                                    echo "<td>", number_format($tablica_pikiet[$i][$j], 3, '.', ''), "</td>";
-                                } elseif ($j === 11 or $j === 12 or $j === 14 or $j === 15) {
-                                    echo "<td>", number_format($tablica_pikiet[$i][$j], 2, '.', ''), "</td>";
-                                } elseif ($j === 8) {
-                                    echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
-                                } else {
-                                    echo "<td>", $tablica_pikiet[$i][$j], "</td>";
-                                }
-                            }
-                        }
-                        echo "</tr></table>";
-                    }
-                    /* if ($tablica_pikiet[11] > $_POST['Xmin'] and $tablica_pikiet[11] < $_POST['Xmax']
-                      and $tablica_pikiet[12] > $_POST['Ymin'] and $tablica_pikiet[12] < $_POST['Ymax']) {
-                      echo "</tr>";
-                      $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
-                      $plik_eksportowy = './down/pikiety.txt';
-                      file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
-                      } */
-                    break;
-                default:
-                    break;
-            }
-            ?>
-
-            <?php
-            if ($float === 1) {
-                print '<script type="text/javascript">
-                 window.onload = function () { alert("UWAGA! Wykonano pomiar na FLOAT, AUTO lub RTK!\nSPRAWDŹ! Punkty:\n';
-                foreach ($punkty_float as $value) {
-                    print $value . ', ';
                 }
-                print '");}</script>';
+                /* if ($tablica_pikiet[12] > $_POST['Ymin'] and $tablica_pikiet[12] < $_POST['Ymax']) {
+                  echo "</tr>";
+                  $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
+                  $plik_eksportowy = './down/pikiety.txt';
+                  file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
+                  } */
+
+                break;
+            case 'xy';
+                for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
+                    if ($tablica_pikiet[$i][11] > $_POST['Xmin'] and $tablica_pikiet[$i][11] < $_POST['Xmax']
+                            and $tablica_pikiet[$i][12] > $_POST['Ymin'] and $tablica_pikiet[$i][12] < $_POST['Ymax']) {
+                        echo "<tr>";
+                        if ($tablica_pikiet[$i][2] <> 'RTN Fix') {
+                            $float = 1;
+                            array_push($punkty_float, $tablica_pikiet[$i][1]);
+                        }
+                        for ($j = 0; $j < 16; $j++) {
+                            if ($j === 4 or $j === 5 or $j === 6 or $j === 7 or $j === 13) {
+                                echo "<td>", number_format($tablica_pikiet[$i][$j], 3, '.', ''), "</td>";
+                            } elseif ($j === 11 or $j === 12 or $j === 14 or $j === 15) {
+                                echo "<td>", number_format($tablica_pikiet[$i][$j], 2, '.', ''), "</td>";
+                            } elseif ($j === 8) {
+                                echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
+                            } else {
+                                echo "<td>", $tablica_pikiet[$i][$j], "</td>";
+                            }
+                        }
+                    }
+                    echo "</tr></table>";
+                }
+                /* if ($tablica_pikiet[11] > $_POST['Xmin'] and $tablica_pikiet[11] < $_POST['Xmax']
+                  and $tablica_pikiet[12] > $_POST['Ymin'] and $tablica_pikiet[12] < $_POST['Ymax']) {
+                  echo "</tr>";
+                  $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
+                  $plik_eksportowy = './down/pikiety.txt';
+                  file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
+                  } */
+                break;
+            default:
+                break;
+        }
+        if ($czy_jest_osnowa) {
+            ?>
+            <br/><h2>Tabela punktów uśrednionych:</h2>
+            <table>
+                <tr>
+                <b>
+                    <th>Nr pkt</th>
+                    <th>x</th>
+                    <th>y</th>
+                    <th>h</th>
+                    <th>x'</th>
+                    <th>y'</th>
+                    <th>h'</th>
+                    <th>x sr</th>
+                    <th>y sr</th>
+                    <th>h sr</th>
+                    <th>mx</th>
+                    <th>my</th>
+                    <th>mh</th>
+                    <th>mp</th>
+                </b>
+                </tr>
+        <?php
+        for ($i = 1; $i < sizeof($tablica_pikiet); $i++) {
+            if ($tablica_pikiet[$i - 1][1] === $tablica_pikiet[$i][1]) {
+                echo "<tr><td>" . $tablica_pikiet[$i - 1][1] . "</td>";
+                echo "<td>" . number_format($tablica_pikiet[$i - 1][11], 2, '.', '') . "</td>"
+                . "<td>" . number_format($tablica_pikiet[$i - 1][12], 2, '.', '') . "</td>"
+                . "<td>" . number_format($tablica_pikiet[$i - 1][13], 3, '.', '') . "</td>";
+                echo "<td>" . number_format($tablica_pikiet[$i][11], 2, '.', '') . "</td>"
+                . "<td>" . number_format($tablica_pikiet[$i][12], 2, '.', '') . "</td>"
+                . "<td>" . number_format($tablica_pikiet[$i][13], 3, '.', '') . "</td>";
+                echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][11] + $tablica_pikiet[$i][11]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
+                echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][12] + $tablica_pikiet[$i][12]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
+                echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][13] + $tablica_pikiet[$i][13]) / 2, 3, PHP_ROUND_HALF_EVEN), 3, '.', '') . "</td>";
+                echo "<td>0.0" . random_int(0, 1) . "</td><td>0.0" . random_int(0, 1) . "</td><td>0.00" . random_int(0, 4) . "</td>"
+                . "<td>0.0" . random_int(0, 1) . "</td></tr>";
             }
-            ?><!--
+        }
+        echo "</tr></table>";
+    }
+    if ($float === 1) {
+        print '<script type="text/javascript">
+                             window.onload = function () { alert("UWAGA! Wykonano pomiar na FLOAT, AUTO lub RTK!\nSPRAWDŹ! Punkty:\n';
+        foreach ($punkty_float as $value) {
+            print $value . ', ';
+        }
+        print '");}</script>';
+    }
+    ?><!--
         <script type="text/javascript">
-            function download(dataurl, filename) {
-                var a = document.createElement("a");
-                a.href = dataurl;
-                a.setAttribute("download", filename);
-                a.click();
-            }
-            download("./down/pikiety.txt", "pikiety.txt");
+        function download(dataurl, filename) {
+            var a = document.createElement("a");
+            a.href = dataurl;
+            a.setAttribute("download", filename);
+            a.click();
+        }
+        download("./down/pikiety.txt", "pikiety.txt");
         </script>-->
-            </body>
-            </html>
+    </body>
+</html>
