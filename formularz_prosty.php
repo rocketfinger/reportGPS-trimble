@@ -32,19 +32,30 @@ and open the template in the editor.
                 <li><a href="./down/Raport_GPS_PL_022016_mod.xsl" download="Raport GPS_CSV.xsl">Szablon CSV</a></li>
                 <li><a href="./down/Raport_GPS_PL_022016.xsl" download="Raport GPS.xsl">Szablon HTML</a></li>
             </ul>
+            <p>W przypadku błednego generowania czasu należy podzielić pomiar zgodnie z dniami pomiaru, w których był on wykonany.</p>
         <p>Przykład poprawnie przygotowanego pliku:<br/>
-            <code>PRS187722591140,1,RTN Fix,2019-05-27 11:38:44,2.000,2751.439,-37364.127,7486.737,1.5,15,3,5750934.54,6564332.64,123.628,0.01,0.01,kod_pikety</code>
+            <code>PRS187722591140,1,RTN Fix,2019-05-27 11:38:44,2.000,2751.439,-37364.127,7486.737,1.5,15,3,5750934.54,6564332.64,123.628,0.01,0.01,kod_pikiety</code>
         </p>
-        <p>Wczytaj plik raportu (bez danych nagłówków! Z separatorem , )</p>
+        <h4>Podaj dane do wygenerowania raportu</h4>
             <form name="wgraj" action="./generuj_prosty.php" method="POST" enctype="multipart/form-data">
-                <input type="file" name="wgraj_raport"><br/><br/><!--
-                Podaj datę pomiaru lub pozostaw puste:<br/>
-                <input type="date" name="data_pomiaru"><br/><br/>-->
+                <label for="plik">Wgraj plik z komputera:<br/>
+                (bez danych nagłówków! Z separatorem "," )</label><br/>
+                <input id="plik" type="file" name="wgraj_raport"><br/><br/>
+                <!--<label for="data">Podaj datę pomiaru lub pozostaw puste:<br/>
+                (W przypadku podania daty, godzina pomiaru zostanie wylosowana z zakresu 7:30-8:00)</label><br/>
+                <input id="data" type="date" name="data_pomiaru"><br/><br/>
+                <label for="czas">Podaj godzinę rozpoczęcia pomiaru lub pozostaw puste</label><br/>
+                <input id="czas" type="time" name="godzina"><br/><br/>
+                <time datetime="08:00:01"></time>-->
                 Podaj obszar z jakiego ma być wygenerowany raport:<br/>
-                <input type="radio" name="zakres" value="calosc" checked="checked">Całość<br/>
-                <input type="radio" name="zakres" value="x">Xmin-Xmax<br/>
-                <input type="radio" name="zakres" value="y">Ymin-Ymax<br/>
-                <input type="radio" name="zakres" value="xy">Xmin-Xmax, Ymin-Ymax<br/><br/>
+                <input id="calosc" type="radio" name="zakres" value="calosc" checked="checked">
+                <label for="calosc">Całość</label><br/>
+                <input id="Xmin-Xmax" type="radio" name="zakres" value="x">
+                <label for="Xmin-Xmax">Xmin-Xmax</label><br/>
+                <input id="Ymin-Ymax" type="radio" name="zakres" value="y">
+                <label for="Ymin-Ymax">Ymin-Ymax</label><br/>
+                <input id="Xmin-Xmax_Ymin-Ymax" type="radio" name="zakres" value="xy">
+                <label for="Xmin-Xmax_Ymin-Ymax">Xmin-Xmax, Ymin-Ymax</label><br/><br/>
                 X-min<input  type="number" name="Xmin" value="0"><br/>
                 X-max<input  type="number" name="Xmax" value="0"><br/>
                 Y-min<input  type="number" name="Ymin" value="0"><br/>
