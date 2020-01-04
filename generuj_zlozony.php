@@ -9,9 +9,12 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <title>Raport GPS ver. 0.0.3</title>
         <style>
+            table {
+                border-collapse: collapse;
+                text-align: center;
+            }
             table, th, td {
                 border: 1px solid black;
-                text-align: center;
             }
         </style>
     </head>
@@ -291,6 +294,7 @@ and open the template in the editor.
         echo "</tr>";
     }
     echo "</table>";
+    // zamknij i skasuj pliki
     fclose($handle);
     fclose($handle2);
     unlink($katalog_docelowy_wgrywania . 'wejsciowy.txt');

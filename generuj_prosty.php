@@ -190,7 +190,7 @@ and open the template in the editor.
                 }
                 /*
                  * sprawdzenie czy nazwa pikiety bieżącej jest równa poprzedniej
-                 * jeśli tak to też jest to 
+                 * jeśli tak to też jest to osnowa
                  */
                 if ($tablica_pikiet[$i][1] == $tablica_pikiet[$i - 1][1]) {
                     //ustaw 30 epok dla bieżącego i poprzedniego
@@ -199,7 +199,7 @@ and open the template in the editor.
                     //ustaw zmienną kontrolną osnowy na true
                     $czy_jest_osnowa = true;
                     /*
-                     * dodaj do każdego rekordu powyżej osnowy dodaj 60 sekund
+                     * dodaj do każdego rekordu powyżej osnowy 60 sekund
                      * zacznij od "i" aż do końca tablicy pikiet
                      */
                     for ($j = $i + 1; $j < $rozmiar_tablicy_pikiet; $j++) {
@@ -220,16 +220,17 @@ and open the template in the editor.
                     $tablica_pikiet[$i - 1][10] = 5;
                     for ($j = $i; $j < $rozmiar_tablicy_pikiet; $j++) {
                         $dataczas = new DateTime($tablica_pikiet[$j][3]);
-                        $dataczas->add(new DateInterval('P0Y0M0DT0H0M0' . $roznica . 'S'));
+                        $dataczas->modify('+'.$roznica.' seconds');
                         $tablica_pikiet[$j][3] = $dataczas->format('Y-m-d H:i:s');
                     }
                 }
                 //jeśli ilość epok jest w przedziale 10-29 to zrób 30 i przelicz wszystko w dół dodając 30 sekund
                 if ($tablica_pikiet[$i - 1][10] > 10 and $tablica_pikiet[$i - 1][10] < 29) {
+                    $roznica = 30 - $tablica_pikiet[$i - 1][10];
                     $tablica_pikiet[$i - 1][10] = 30;
                     for ($j = $i; $j < $rozmiar_tablicy_pikiet; $j++) {
                         $dataczas = new DateTime($tablica_pikiet[$j][3]);
-                        $dataczas->add(new DateInterval('P0Y0M0DT0H0M30S'));
+                        $dataczas->modify('+'.$roznica.' seconds');
                         $tablica_pikiet[$j][3] = $dataczas->format('Y-m-d H:i:s');
                     }
                 }
@@ -290,23 +291,25 @@ and open the template in the editor.
                                 echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
                             } else {
                                 echo "<td>", $tablica_pikiet[$i][$j], "</td>";
-                            }
+                            };
                         }
+                        echo "</tr>\n";
                     }
-                    echo "</tr></table>";
+                    echo "</table>\n";
 
                     /*
                      * tutaj było generowanie pikiet i ich współrzędnych aby nie było rozbieżności
                      * z pomiaru i z raportu
                      * 
                      * $plik_eksportowy = './down/pikiety.txt';
-                      for($i=0; $i<$rozmiar_tablicy_pikiet; $i++){
-                      if()
-                      }
-                      $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
-                      file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
+                     * for($i=0; $i<$rozmiar_tablicy_pikiet; $i++){
+                     * if()
+                     * }
+                     * $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
+                     * file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
                      */
                     break;
+                //generuj raport dla zakresu X
                 case 'x':
                     for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
                         if ($tablica_pikiet[$i][11] > $_POST['Xmin'] and $tablica_pikiet[$i][11] < $_POST['Xmax']) {
@@ -327,8 +330,9 @@ and open the template in the editor.
                                 }
                             }
                         }
+                        echo "</tr>\n";
                     }
-                    echo "</tr></table>";
+                    echo "</table>\n";
                     /* if ($tablica_pikiet[12] > $_POST['Xmin'] and $tablica_pikiet[12] < $_POST['Xmax']) {
                       echo "</tr>";
                       $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
@@ -336,6 +340,7 @@ and open the template in the editor.
                       file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
                       } */
                     break;
+                //generuj raport dla zakresu Y
                 case 'y':
                     for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
                         if ($tablica_pikiet[$i][12] > $_POST['Ymin'] and $tablica_pikiet[$i][12] < $_POST['Ymax']) {
@@ -355,8 +360,9 @@ and open the template in the editor.
                                     echo "<td>", $tablica_pikiet[$i][$j], "</td>";
                                 }
                             }
+                            echo "</tr>\n";
                         }
-                        echo "</tr></table>";
+                        echo "</table>\n";
                     }
                     /* if ($tablica_pikiet[12] > $_POST['Ymin'] and $tablica_pikiet[12] < $_POST['Ymax']) {
                       echo "</tr>";
@@ -366,6 +372,7 @@ and open the template in the editor.
                       } */
 
                     break;
+                //generuj raport dla zakresu XY
                 case 'xy';
                     for ($i = 0; $i < $rozmiar_tablicy_pikiet; $i++) {
                         if ($tablica_pikiet[$i][11] > $_POST['Xmin'] and $tablica_pikiet[$i][11] < $_POST['Xmax']
@@ -386,8 +393,9 @@ and open the template in the editor.
                                     echo "<td>", $tablica_pikiet[$i][$j], "</td>";
                                 }
                             }
+                            echo "</tr>\n";
                         }
-                        echo "</tr></table>";
+                        echo "</table>\n";
                     }
                     /* if ($tablica_pikiet[11] > $_POST['Xmin'] and $tablica_pikiet[11] < $_POST['Xmax']
                       and $tablica_pikiet[12] > $_POST['Ymin'] and $tablica_pikiet[12] < $_POST['Ymax']) {
@@ -422,7 +430,7 @@ and open the template in the editor.
                         <th>mp</th>
                     </tr>
                 <?php
-                    //sformatowany wydruk
+                    //sformatowany wydruk. zacznij od 1 aż do końca sprawdzając czy $i-1=$i. następnie uśrednij
                     for ($i = 1; $i < sizeof($tablica_pikiet); $i++) {
                         if ($tablica_pikiet[$i - 1][1] == $tablica_pikiet[$i][1]) {
                             echo "<tr><td>" . $tablica_pikiet[$i - 1][1] . "</td>";
@@ -436,7 +444,7 @@ and open the template in the editor.
                             echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][12] + $tablica_pikiet[$i][12]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
                             echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][13] + $tablica_pikiet[$i][13]) / 2, 3, PHP_ROUND_HALF_EVEN), 3, '.', '') . "</td>";
                             echo "<td>0.0" . random_int(0, 1) . "</td><td>0.0" . random_int(0, 1) . "</td><td>0.00" . random_int(0, 4) . "</td>"
-                            . "<td>0.0" . random_int(0, 1) . "</td></tr>";
+                            . "<td>0.0" . random_int(0, 1) . "</td></tr>\n";
                         }
                     }
                 echo "</table>";
@@ -455,7 +463,7 @@ and open the template in the editor.
             }
             ?>
             <!--
-            pobranie pliku z pikietami z raportu
+            pobranie pliku z pikietami z raportu. wyłączone
             <script type="text/javascript">
                 function download(dataurl, filename) {
                     var a = document.createElement("a");
