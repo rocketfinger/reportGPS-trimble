@@ -38,14 +38,14 @@ and open the template in the editor.
     <p>Przykład poprawnie przygotowanego pliku z oryginalnego pomiaru:<br/>
         <code>PRS187722591140,1,RTN Fix,2019-05-27 11:38:44,2.000,2751.439,-37364.127,7486.737,1.5,15,3,5750934.54,6564332.64,123.628,0.01,0.01,kod_pikety</code>
     </p>
-    <p>Wczytaj plki z pikietami do "wygenerowania" pomiaru</p>
+    <p><label for="pikiety">Wczytaj plki z pikietami do "wygenerowania" pomiaru</label></p>
     <form name="wgraj" action="./generuj_zlozony.php" method="POST" enctype="multipart/form-data">
-        <input type="file" name="wgraj_raport"><br/><br/>
-        Podaj datę pomiaru:<br/>
-        <input  type="date" name="data_pomiaru"><br/><br/>
-        Wczytaj plik raportu (oryginalny pomiar zawierający 17 kolumn bez danych nagłówków! Z separatorem "," ), 
-        z którego zostaną pobrane informacje o nazwie bazy oraz o wektorach.<br/><br/>
-        <input type="file" name="pomiar_prawdziwy"><br/><br/>
+        <input id="pikiety" type="file" name="wgraj_raport"><br/><br/>
+        <label for="data_pom">Podaj datę pomiaru:<br/></label>
+        <input id="data_pom" type="date" name="data_pomiaru"><br/><br/>
+        <label for="prawdziwy">Wczytaj plik raportu (oryginalny pomiar zawierający 17 kolumn bez danych nagłówków! Z separatorem "," ), 
+            z którego zostaną pobrane informacje o nazwie bazy oraz o wektorach.<br/><br/></label>
+        <input id="prawdziwy" type="file" name="pomiar_prawdziwy"><br/><br/>
         <!--Podaj nazwę i współrzędne Bazy ("PRS"):<br/>
         Nazwa: <input  type="text" name="baza_nazwa" value=""><br/>
         X: <input  type="text"   name="bazaX" value="0"><br/>
