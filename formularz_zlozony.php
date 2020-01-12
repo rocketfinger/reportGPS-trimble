@@ -12,7 +12,7 @@ and open the template in the editor.
     </head>
     <body>
         <h1>
-            <u><b>UWAGA!</b></u> wersja rozwojowa. Proszę uważnie czytać instrukcję ponieważ pewne funkcje mogą się zmiać.
+            <u><b>UWAGA!</b></u> wersja rozwojowa. Proszę uważnie czytać instrukcję ponieważ pewne funkcje mogą się zmieniać.
         </h1>
         <p>Plik z pikietami do wygenerowania raportu powinien zawierać 5 kolumn (nr,x,y,h,kod). 
         Skrypt generuje pomiar całkowicie od nowa. Ważne aby w kodzie pliku znajdował się fragment "osn". Wtedy zostanie utworzony pomiar 30 sekund.

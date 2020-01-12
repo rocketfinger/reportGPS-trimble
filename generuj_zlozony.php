@@ -4,7 +4,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
+<html lang="pl">
     <head>
         <meta charset="UTF-8">
         <title>Raport GPS ver. 0.0.3</title>
@@ -41,12 +41,14 @@ and open the template in the editor.
         if ($wgranieOK == 0) {
             echo "Jakiś błąd jest po drodze. Pliku nie wgrano.";
             // jeśli ma wartość 1 to rób dalej
-        } else {
+        }
+        else {
             if (move_uploaded_file($_FILES["wgraj_raport"]["tmp_name"], $plik_docelowy_wgrywania)) {
                 //echo "Plik " . basename($_FILES["wgraj_raport"]["name"]) . " wgrano.";
                 //zmień nazwę z dowolnej na standardową
                 rename("$katalog_docelowy_wgrywania" . basename($_FILES["wgraj_raport"]["name"]), "$katalog_docelowy_wgrywania/wejsciowy.txt");
-            } else {
+            }
+            else {
                 echo "Jakiś błąd w końcowym etapie wgrywania. Spróbuj jeszcze raz.";
             }
         }
@@ -70,17 +72,19 @@ and open the template in the editor.
         if ($wgranieOK == 0) {
             echo "Jakiś błąd jest po drodze. Pliku nie wgrano.";
             // jeśli ma wartość 1 to rób dalej
-        } else {
+        }
+        else {
             if (move_uploaded_file($_FILES["pomiar_prawdziwy"]["tmp_name"], $plik_docelowy_wgrywania_pomiar_prawdziwy)) {
                 //echo "Plik " . basename($_FILES["wgraj_raport"]["name"]) . " wgrano.";
                 //zmień nazwę z dowolnej na standardową
                 rename("$katalog_docelowy_wgrywania" . basename($_FILES["pomiar_prawdziwy"]["name"]), "$katalog_docelowy_wgrywania/pomiar_prawdziwy.txt");
-            } else {
+            }
+            else {
                 echo "Jakiś błąd w końcowym etapie wgrywania. Spróbuj jeszcze raz.";
             }
         }
         //tablica z punktami do "wygenerowania"
-        $tablica_pikiet = array(array("0baza", "1nr_pkt", "2rtn-fix", "3data czas", "4tyczka", /* 5 */ 0, /* 6 */ 0, /* 7 */ 0, "8pdop",
+        $tablica_pikiet = array(array("0baza", "1nr_pkt", "2rtn-fix", "3data czas", "4tyczka", "5dx", "6dy", "7dz", "8pdop",
                 "9sat", "10epoki", "11x", "12y", "13h", "14mp", "15mh", "16kod", "17odleglosc-pkt1-2", "18najblizszy"));
         //tablica pikiet z punktami pomierzonymi
         $tablica_pomiaru = array(array("0baza", "1nr_pkt", "2rtn-fix", "3data czas", "4tyczka", "5dx", "6dy", "7dz", "8pdop",
@@ -102,11 +106,11 @@ and open the template in the editor.
             $tablica_pikiet [$i][5] = 0.000;
             $tablica_pikiet [$i][6] = 0.000;
             $tablica_pikiet [$i][7] = 0.000;
-            $tablica_pikiet [$i][11] = number_format($rekord[1], 2, '.', '');
+            $tablica_pikiet [$i][11] = $rekord[1];
             //$x = $x + $tablica_pikiet [$i][11];
-            $tablica_pikiet [$i][12] = number_format($rekord[2], 2, '.', '');
+            $tablica_pikiet [$i][12] = $rekord[2];
             //$y = $y + $tablica_pikiet [$i][12];
-            $tablica_pikiet [$i][13] = number_format($rekord[3], 3, '.', '');
+            $tablica_pikiet [$i][13] = $rekord[3];
             //$h = $h + $tablica_pikiet [$i][13];
             //sprawdzenie czy wśród punktów jest osnowa i dodanie drugiego pomiaru
             if (preg_match("/osn/i", $rekord[4]) == 1) {
@@ -124,18 +128,22 @@ and open the template in the editor.
                 if ($znak === 0) {
                     $tablica_pikiet [$i][5] = $przesuniecie * (-1.000);
                     $tablica_pikiet [$i][6] = $przesuniecie * (-1.000);
+                    $tablica_pikiet [$i][7] = $przesuniecie * (-1.000);
                     $tablica_pikiet [$i][13] = number_format($rekord[3] - $przesuniecie, 3, '.', '');
                     $tablica_pikiet [$i + 1][5] = $przesuniecie;
                     $tablica_pikiet [$i + 1][6] = $przesuniecie;
+                    $tablica_pikiet [$i + 1][7] = $przesuniecie;
                     $tablica_pikiet [$i + 1][13] = number_format($rekord[3] + $przesuniecie, 3, '.', '');
                 }
                 //dla znaku + najpierw dodaj przesunięcie
                 else {
                     $tablica_pikiet [$i][5] = $przesuniecie;
                     $tablica_pikiet [$i][6] = $przesuniecie;
+                    $tablica_pikiet [$i][7] = $przesuniecie;
                     $tablica_pikiet [$i][13] = number_format($rekord[3] + $przesuniecie, 3, '.', '');
                     $tablica_pikiet [$i + 1][5] = $przesuniecie * (-1.000);
                     $tablica_pikiet [$i + 1][6] = $przesuniecie * (-1.000);
+                    $tablica_pikiet [$i + 1][7] = $przesuniecie * (-1.000);
                     $tablica_pikiet [$i + 1][13] = number_format($rekord[3] - $przesuniecie, 3, '.', '');
                 }
                 //dla dodanego drugiego pomiaru osnowy dodaj kod osn i przeskocz o jedno $i aby nie napisać
@@ -198,6 +206,7 @@ and open the template in the editor.
         unlink($katalog_docelowy_wgrywania . 'pomiar_prawdziwy.txt');
         //wypełnij wstępnie tablicę z pikietami do wygenerowania
         for ($i = 0; $i < sizeof($tablica_pikiet); $i++) {
+            $tablica_pikiet[$i][0] = "baza";
             $tablica_pikiet[$i][2] = "RTN Fix";
             $tablica_pikiet[$i][3] = "data-czas";
             $tablica_pikiet[$i][4] = "2.000";
@@ -205,10 +214,19 @@ and open the template in the editor.
             //$tablica_pikiet[$i][6] = round($tablica_pikiet[$i][12] - $tablica_stacji[$numer_bazy][2] + random_int(1, 9) * 0.001, 3);
             //$tablica_pikiet[$i][7] = round(($tablica_pikiet[$i][13] - $tablica_stacji[$numer_bazy][3]) * 1000 + random_int(1, 9) * 0.1 + random_int(1, 9) * 0.01 + random_int(1, 9) * 0.001, 3);
             $tablica_pikiet[$i][8] = random_int(1, 4) . "." . random_int(0, 9);
+            //dla punktów podwójnie pomierzonych zrób zrób taki sam PDOP
+            if ($i > 0 && $tablica_pikiet[$i][1] == $tablica_pikiet[$i - 1][1]) {
+                $tablica_pikiet[$i][8] = $tablica_pikiet[$i - 1][8];
+            }
             $tablica_pikiet[$i][9] = random_int(8, 17);
+            //dla punktów podwójnie pomierzonych zrób zrób tyle samo satelit
+            if ($i > 0 && $tablica_pikiet[$i][1] == $tablica_pikiet[$i - 1][1]) {
+                $tablica_pikiet[$i][9] = $tablica_pikiet[$i - 1][9];
+            }
             if ($tablica_pikiet[$i][16] === "osn") {
                 $tablica_pikiet[$i][10] = 30;
-            } else {
+            }
+            else {
                 $tablica_pikiet[$i][10] = 5;
             }
             $tablica_pikiet[$i][14] = "0.0" . random_int(1, 3);
@@ -217,7 +235,7 @@ and open the template in the editor.
                 $tablica_pikiet[$i][15] = $tablica_pikiet[$i][14];
             }
             //obliczenie odległości pomiędzy kolejnymi punktami pikietami wraz z losową wartością i wpisanie do tablicy
-            if ($i>0) {
+            if ($i > 0) {
                 $tablica_pikiet[$i][17] = round(sqrt(pow($tablica_pikiet[$i][11] - $tablica_pikiet[$i - 1][11], 2) + pow($tablica_pikiet[$i][12] - $tablica_pikiet[$i - 1][12], 2)) * 0.5) + 3 + random_int(0, 15);
             }
         }
@@ -246,9 +264,9 @@ and open the template in the editor.
         for ($i = 0; $i < sizeof($tablica_pikiet); $i++) {
             $mala_numer = 0;
             $odl_mala = sqrt(pow($tablica_pikiet[0][11] - $tablica_pomiaru[0][11], 2) + pow($tablica_pikiet[0][12] - $tablica_pomiaru[0][12], 2));
-            for ($j = 1; $j < $rozmiar_tablicy_prawdziwy; $j++) {
+            for ($j = 0; $j < $rozmiar_tablicy_prawdziwy; $j++) {
                 $odl = sqrt(pow($tablica_pikiet[$i][11] - $tablica_pomiaru[$j][11], 2) + pow($tablica_pikiet[$i][12] - $tablica_pomiaru[$j][12], 2));
-                if ($odl_mala > $odl) {
+                if ($odl < $odl_mala) {
                     $odl_mala = $odl;
                     $mala_numer = $j;
                 }
@@ -256,9 +274,9 @@ and open the template in the editor.
             //numer bazy
             $tablica_pikiet[$i][0] = $tablica_pomiaru[$mala_numer][0];
             //wektory
-            $tablica_pikiet[$i][5] = $tablica_pikiet[$i][5] + number_format($tablica_pomiaru[$mala_numer][5] + $tablica_pikiet[$i][11] - $tablica_pomiaru[$mala_numer][11], 3, '.', '');
-            $tablica_pikiet[$i][6] = $tablica_pikiet[$i][6] + number_format($tablica_pomiaru[$mala_numer][6] + $tablica_pikiet[$i][12] - $tablica_pomiaru[$mala_numer][12], 3, '.', '');
-            $tablica_pikiet[$i][7] = $tablica_pikiet[$i][7] + number_format($tablica_pomiaru[$mala_numer][7] + $tablica_pikiet[$i][13] - $tablica_pomiaru[$mala_numer][13], 3, '.', '');
+            $tablica_pikiet[$i][5] = $tablica_pikiet[$i][5] + $tablica_pomiaru[$mala_numer][5] + $tablica_pikiet[$i][11] - $tablica_pomiaru[$mala_numer][11];
+            $tablica_pikiet[$i][6] = $tablica_pikiet[$i][6] + $tablica_pomiaru[$mala_numer][6] + $tablica_pikiet[$i][12] - $tablica_pomiaru[$mala_numer][12];
+            $tablica_pikiet[$i][7] = $tablica_pikiet[$i][7] + $tablica_pomiaru[$mala_numer][7] + $tablica_pikiet[$i][13] - $tablica_pomiaru[$mala_numer][13];
         }
         if ($czy_jest_osnowa) {
             ?>
@@ -272,64 +290,74 @@ and open the template in the editor.
                     <th>x'</th>
                     <th>y'</th>
                     <th>h'</th>
-                    <th>x sr</th>
-                    <th>y sr</th>
-                    <th>h sr</th>
+                    <th>x śr</th>
+                    <th>y śr</th>
+                    <th>h śr</th>
                     <th>mx</th>
                     <th>my</th>
                     <th>mh</th>
                     <th>mp</th>
-            </tr>
-            <?php
-            for ($i = 1; $i < sizeof($tablica_pikiet); $i++) {
-                if ($tablica_pikiet[$i - 1][1] == $tablica_pikiet[$i][1]) {
-                    echo "<tr><td>" . $tablica_pikiet[$i - 1][1] . "</td>";
-                    echo "<td>" . $tablica_pikiet[$i - 1][11] . "</td><td>" . $tablica_pikiet[$i - 1][12] . "</td>"
-                    . "<td>" . $tablica_pikiet[$i - 1][13] . "</td>";
-                    echo "<td>" . $tablica_pikiet[$i][11] . "</td><td>" . $tablica_pikiet[$i][12] . "</td>"
-                    . "<td>" . $tablica_pikiet[$i][13] . "</td>";
-                    echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][11] + $tablica_pikiet[$i][11]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
-                    echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][12] + $tablica_pikiet[$i][12]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
-                    echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][13] + $tablica_pikiet[$i][13]) / 2, 3, PHP_ROUND_HALF_EVEN), 3, '.', '') . "</td>";
-                    echo "<td>0.0" . random_int(0, 1) . "</td><td>0.0" . random_int(0, 1) . "</td><td>0.00" . random_int(0, 4) . "</td>"
-                    . "<td>0.0" . random_int(0, 1) . "</td></tr>";
+                </tr>
+                <?php
+                for ($i = 1; $i < sizeof($tablica_pikiet); $i++) {
+                    if ($tablica_pikiet[$i - 1][1] == $tablica_pikiet[$i][1]) {
+                        echo "<tr><td>" . $tablica_pikiet[$i - 1][1] . "</td>";
+                        echo "<td>" . $tablica_pikiet[$i - 1][11] . "</td><td>" . $tablica_pikiet[$i - 1][12] . "</td>"
+                        . "<td>" . $tablica_pikiet[$i - 1][13] . "</td>";
+                        echo "<td>" . $tablica_pikiet[$i][11] . "</td><td>" . $tablica_pikiet[$i][12] . "</td>"
+                        . "<td>" . $tablica_pikiet[$i][13] . "</td>";
+                        echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][11] + $tablica_pikiet[$i][11]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
+                        echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][12] + $tablica_pikiet[$i][12]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
+                        echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][13] + $tablica_pikiet[$i][13]) / 2, 3, PHP_ROUND_HALF_EVEN), 3, '.', '') . "</td>";
+                        echo "<td>0.0" . random_int(0, 1) . "</td><td>0.0" . random_int(0, 1) . "</td><td>0.00" . random_int(0, 4) . "</td>"
+                        . "<td>0.0" . random_int(0, 1) . "</td></tr>";
+                    }
                 }
             }
-        }
-        ?>
-    </table><br/>
-    <h2>Tabela wektorów GPS:</h2>
-    <table>
-        <tr>
-        <b>
-            <th>Pkt Bazowy</th>
-            <th>Nr pkt</th>
-            <th>Rozwiązanie</th>
-            <th>Data Godzina</th>
-            <th>Wys. anteny</th>
-            <th>ECEF ∆X</th>
-            <th>ECEF ∆Y</th>
-            <th>ECEF ∆Z</th>
-            <th>PODP</th>
-            <th>sat</th>
-            <th>e</th>
-            <th>X</th>
-            <th>Y</th>
-            <th>h</th>
-            <th>mp</th>
-            <th>mh</th>
-        </b>
-    </tr>
-    <?php
-    //wydrukuj "poprawny" rapor z pomiaru pikiet
-    for ($i = 0; $i < sizeof($tablica_pikiet); $i++) {
-        echo "<tr>";
-        for ($j = 0; $j < 16; $j++) {
-            echo "<td>", $tablica_pikiet[$i][$j], "</td>";
-        }
-        echo "</tr>\n";
-    }
-    echo "</table>\n";
-    ?>
-</body>
+            ?>
+        </table><br/>
+        <h2>Tabela wektorów GPS:</h2>
+        <table>
+            <tr>
+                <th>Pkt Bazowy</th>
+                <th>Nr pkt</th>
+                <th>Rozwiązanie</th>
+                <th>Data Godzina</th>
+                <th>Wys. anteny</th>
+                <th>ECEF ∆X</th>
+                <th>ECEF ∆Y</th>
+                <th>ECEF ∆Z</th>
+                <th>PODP</th>
+                <th>sat</th>
+                <th>e</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>h</th>
+                <th>mp</th>
+                <th>mh</th>
+            </tr>
+            <?php
+            //wydrukuj "poprawny" rapor z pomiaru pikiet
+            for ($i = 0; $i < sizeof($tablica_pikiet); $i++) {
+                echo "<tr>";
+                //sformatowany wydruk danych numerycznych i zwykłych
+                for ($j = 0; $j < 16; $j++) {
+                    if ($j === 4 or $j === 5 or $j === 6 or $j === 7 or $j === 13) {
+                        echo "<td>", number_format($tablica_pikiet[$i][$j], 3, '.', ''), "</td>";
+                    }
+                    elseif ($j === 11 or $j === 12 or $j === 14 or $j === 15) {
+                        echo "<td>", number_format($tablica_pikiet[$i][$j], 2, '.', ''), "</td>";
+                    }
+                    elseif ($j === 8) {
+                        echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
+                    }
+                    else {
+                        echo "<td>", $tablica_pikiet[$i][$j], "</td>";
+                    }
+                }
+                echo "</tr>\n";
+            }
+            ?>
+        </table>
+    </body>
 </html>
