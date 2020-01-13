@@ -8,15 +8,7 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title>Raport GPS ver. 0.0.3</title>
-        <style>
-            table {
-                border-collapse: collapse;
-                text-align: center;
-            }
-            table, th, td {
-                border: 1px solid black;
-            }
-        </style>
+        <link href="styl.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <?php
@@ -213,6 +205,7 @@ and open the template in the editor.
             //$tablica_pikiet[$i][5] = round($tablica_pikiet[$i][11] - $tablica_stacji[$numer_bazy][1] + random_int(1, 9) * 0.001, 3);
             //$tablica_pikiet[$i][6] = round($tablica_pikiet[$i][12] - $tablica_stacji[$numer_bazy][2] + random_int(1, 9) * 0.001, 3);
             //$tablica_pikiet[$i][7] = round(($tablica_pikiet[$i][13] - $tablica_stacji[$numer_bazy][3]) * 1000 + random_int(1, 9) * 0.1 + random_int(1, 9) * 0.01 + random_int(1, 9) * 0.001, 3);
+            //wylosuj PDOP
             $tablica_pikiet[$i][8] = random_int(1, 4) . "." . random_int(0, 9);
             //dla punktów podwójnie pomierzonych zrób zrób taki sam PDOP
             if ($i > 0 && $tablica_pikiet[$i][1] == $tablica_pikiet[$i - 1][1]) {
@@ -277,87 +270,102 @@ and open the template in the editor.
             $tablica_pikiet[$i][5] = $tablica_pikiet[$i][5] + $tablica_pomiaru[$mala_numer][5] + $tablica_pikiet[$i][11] - $tablica_pomiaru[$mala_numer][11];
             $tablica_pikiet[$i][6] = $tablica_pikiet[$i][6] + $tablica_pomiaru[$mala_numer][6] + $tablica_pikiet[$i][12] - $tablica_pomiaru[$mala_numer][12];
             $tablica_pikiet[$i][7] = $tablica_pikiet[$i][7] + $tablica_pomiaru[$mala_numer][7] + $tablica_pikiet[$i][13] - $tablica_pomiaru[$mala_numer][13];
+//            //PDOP z najbliższego
+//            //$tablica_pikiet[$i][8] = random_int(1, 4) . "." . random_int(0, 9);
+//            $tablica_pikiet[$i][8] = $tablica_pomiaru[$mala_numer][8];
+//            //dla punktów podwójnie pomierzonych zrób zrób taki sam PDOP
+//            if ($i > 0 && $tablica_pikiet[$i][1] == $tablica_pikiet[$i - 1][1]) {
+//                $tablica_pikiet[$i][8] = $tablica_pikiet[$i - 1][8];
+//            }
+//            $tablica_pikiet[$i][9] = random_int(8, 17);
+//            //dla punktów podwójnie pomierzonych zrób zrób tyle samo satelit
+//            if ($i > 0 && $tablica_pikiet[$i][1] == $tablica_pikiet[$i - 1][1]) {
+//                $tablica_pikiet[$i][9] = $tablica_pikiet[$i - 1][9];
+//            }
+            
         }
-        if ($czy_jest_osnowa) {
-            ?>
-            <h2>Tabela punktów uśrednionych:</h2>
-            <table>
-                <tr>
-                    <th>Nr pkt</th>
-                    <th>x</th>
-                    <th>y</th>
-                    <th>h</th>
-                    <th>x'</th>
-                    <th>y'</th>
-                    <th>h'</th>
-                    <th>x śr</th>
-                    <th>y śr</th>
-                    <th>h śr</th>
-                    <th>mx</th>
-                    <th>my</th>
-                    <th>mh</th>
-                    <th>mp</th>
-                </tr>
-                <?php
-                for ($i = 1; $i < sizeof($tablica_pikiet); $i++) {
-                    if ($tablica_pikiet[$i - 1][1] == $tablica_pikiet[$i][1]) {
-                        echo "<tr><td>" . $tablica_pikiet[$i - 1][1] . "</td>";
-                        echo "<td>" . $tablica_pikiet[$i - 1][11] . "</td><td>" . $tablica_pikiet[$i - 1][12] . "</td>"
-                        . "<td>" . $tablica_pikiet[$i - 1][13] . "</td>";
-                        echo "<td>" . $tablica_pikiet[$i][11] . "</td><td>" . $tablica_pikiet[$i][12] . "</td>"
-                        . "<td>" . $tablica_pikiet[$i][13] . "</td>";
-                        echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][11] + $tablica_pikiet[$i][11]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
-                        echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][12] + $tablica_pikiet[$i][12]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
-                        echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][13] + $tablica_pikiet[$i][13]) / 2, 3, PHP_ROUND_HALF_EVEN), 3, '.', '') . "</td>";
-                        echo "<td>0.0" . random_int(0, 1) . "</td><td>0.0" . random_int(0, 1) . "</td><td>0.00" . random_int(0, 4) . "</td>"
-                        . "<td>0.0" . random_int(0, 1) . "</td></tr>";
-                    }
+        ?>
+    </table><br/>
+    <h2 class="raport">Tabela wektorów GPS:</h2>
+    <table>
+        <tr>
+            <th>Pkt Bazowy</th>
+            <th>Nr pkt</th>
+            <th>Rozwiązanie</th>
+            <th>Data Godzina</th>
+            <th>Wys. anteny</th>
+            <th>ECEF ∆X</th>
+            <th>ECEF ∆Y</th>
+            <th>ECEF ∆Z</th>
+            <th>PODP</th>
+            <th>sat</th>
+            <th>e</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>h</th>
+            <th>mp</th>
+            <th>mh</th>
+        </tr>
+        <?php
+        //wydrukuj "poprawny" rapor z pomiaru pikiet
+        for ($i = 0; $i < sizeof($tablica_pikiet); $i++) {
+            echo "<tr>";
+            //sformatowany wydruk danych numerycznych i zwykłych
+            for ($j = 0; $j < 16; $j++) {
+                if ($j === 4 or $j === 5 or $j === 6 or $j === 7 or $j === 13) {
+                    echo "<td>", number_format($tablica_pikiet[$i][$j], 3, '.', ''), "</td>";
+                }
+                elseif ($j === 11 or $j === 12 or $j === 14 or $j === 15) {
+                    echo "<td>", number_format($tablica_pikiet[$i][$j], 2, '.', ''), "</td>";
+                }
+                elseif ($j === 8) {
+                    echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
+                }
+                else {
+                    echo "<td>", $tablica_pikiet[$i][$j], "</td>";
                 }
             }
-            ?>
-        </table><br/>
-        <h2>Tabela wektorów GPS:</h2>
+            echo "</tr>\n";
+        }
+        ?>
+    </table>
+    <?php
+    if ($czy_jest_osnowa) {
+        ?>
+        <h2 class="raport">Tabela punktów uśrednionych:</h2>
         <table>
             <tr>
-                <th>Pkt Bazowy</th>
                 <th>Nr pkt</th>
-                <th>Rozwiązanie</th>
-                <th>Data Godzina</th>
-                <th>Wys. anteny</th>
-                <th>ECEF ∆X</th>
-                <th>ECEF ∆Y</th>
-                <th>ECEF ∆Z</th>
-                <th>PODP</th>
-                <th>sat</th>
-                <th>e</th>
-                <th>X</th>
-                <th>Y</th>
+                <th>x</th>
+                <th>y</th>
                 <th>h</th>
-                <th>mp</th>
+                <th>x'</th>
+                <th>y'</th>
+                <th>h'</th>
+                <th>x śr</th>
+                <th>y śr</th>
+                <th>h śr</th>
+                <th>mx</th>
+                <th>my</th>
                 <th>mh</th>
+                <th>mp</th>
             </tr>
             <?php
-            //wydrukuj "poprawny" rapor z pomiaru pikiet
-            for ($i = 0; $i < sizeof($tablica_pikiet); $i++) {
-                echo "<tr>";
-                //sformatowany wydruk danych numerycznych i zwykłych
-                for ($j = 0; $j < 16; $j++) {
-                    if ($j === 4 or $j === 5 or $j === 6 or $j === 7 or $j === 13) {
-                        echo "<td>", number_format($tablica_pikiet[$i][$j], 3, '.', ''), "</td>";
-                    }
-                    elseif ($j === 11 or $j === 12 or $j === 14 or $j === 15) {
-                        echo "<td>", number_format($tablica_pikiet[$i][$j], 2, '.', ''), "</td>";
-                    }
-                    elseif ($j === 8) {
-                        echo "<td>", number_format($tablica_pikiet[$i][$j], 1, '.', ''), "</td>";
-                    }
-                    else {
-                        echo "<td>", $tablica_pikiet[$i][$j], "</td>";
-                    }
+            for ($i = 1; $i < sizeof($tablica_pikiet); $i++) {
+                if ($tablica_pikiet[$i - 1][1] == $tablica_pikiet[$i][1]) {
+                    echo "<tr><td>" . $tablica_pikiet[$i - 1][1] . "</td>";
+                    echo "<td>" . $tablica_pikiet[$i - 1][11] . "</td><td>" . $tablica_pikiet[$i - 1][12] . "</td>"
+                    . "<td>" . $tablica_pikiet[$i - 1][13] . "</td>";
+                    echo "<td>" . $tablica_pikiet[$i][11] . "</td><td>" . $tablica_pikiet[$i][12] . "</td>"
+                    . "<td>" . $tablica_pikiet[$i][13] . "</td>";
+                    echo "<td><b>" . number_format(round(($tablica_pikiet[$i - 1][11] + $tablica_pikiet[$i][11]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</b></td>";
+                    echo "<td><b>" . number_format(round(($tablica_pikiet[$i - 1][12] + $tablica_pikiet[$i][12]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</b></td>";
+                    echo "<td><b>" . number_format(round(($tablica_pikiet[$i - 1][13] + $tablica_pikiet[$i][13]) / 2, 3, PHP_ROUND_HALF_EVEN), 3, '.', '') . "</b></td>";
+                    echo "<td>0.0" . random_int(0, 1) . "</td><td>0.0" . random_int(0, 1) . "</td><td>0.00" . random_int(0, 4) . "</td>"
+                    . "<td>0.0" . random_int(0, 1) . "</td></tr>";
                 }
-                echo "</tr>\n";
             }
-            ?>
-        </table>
-    </body>
+        }
+        ?>
+</body>
 </html>

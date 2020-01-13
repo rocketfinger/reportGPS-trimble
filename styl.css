@@ -1,0 +1,27 @@
+/*
+Styl utworzony do prezentacji wyników z raporu GNSS Trimbla
+*/
+/* 
+    Created on : 13 sty 2020, 19:39:05
+    Author     : Kamil Skaskiewicz
+*/
+
+table
+    {
+        font-size: 8pt;
+        font-family: Times New Roman;
+        border: 0.5pt solid black;
+        border-spacing: 2px;
+        border-collapse: separate;
+        width: 700pt;
+    }
+th, tr, td
+    {
+        border: 0.5pt solid black;
+        padding: 3px;
+    }
+h2.raport
+    {
+        font-size: 12pt;
+        font-family: Times New Roman;
+    }

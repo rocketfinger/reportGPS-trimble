@@ -19,13 +19,14 @@ and open the template in the editor.
             <ul>
                 <li>czas pomiaru w zakresie gdy jest mniej niż 5 sekund</li>
                 <li>dwa razy po 30 sekund gdy w kodzie trafi na ciąg znaków "osn"</li>
+                <li>wylicza średnią dla podwójnych pomiarów</li>
                 <li>gdy czas pomiaru jest większy niż 10 i mniejszy niż 29 zmienia to na 30 sekund</li>
                 <li>PDOP, mp, mh</li>
             </ul>
             <p>Może wygenerować obserwacje z zadanego obszaru. <br/>
             W tym celu należy podać X-min, X-max Y-min, Y-max lub wszystkie 4 wartości. 
             Jeśli chcesz otrzymać raport z całości, pozostaw wartości domyślne.<br/>
-            Po wygenerowaniu wyświetla ifno o pomiarze innym niż RTN oraz pozwala ściągnąć plik z pikietami. (chwilowo wyłączone)<br/><br/>
+            Po wygenerowaniu wyświetla info o pomiarze innym niż RTN oraz pozwala ściągnąć plik z pikietami. (chwilowo wyłączone)<br/><br/>
             Plik txt/csv można przygotować z raportu GPS i ręcznie go dostosować do przykładu poniżej.
             Można go również przygotować używając szablonów poniżej wykorzystując je w kontrolerze lub ASCII File Generator: <br/></p>
             <ul>

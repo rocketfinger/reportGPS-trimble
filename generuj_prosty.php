@@ -9,15 +9,7 @@ and open the template in the editor.
         <title>Raport GPS ver. 0.0.3</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            table {
-                border-collapse: collapse;
-                text-align: center;
-            }
-            table, th, td {
-                border: 1px solid black;
-            }
-        </style>
+        <link href="styl.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <?php
@@ -248,7 +240,7 @@ and open the template in the editor.
          * wydruk tabeli wektorów z podziałem na wybór zakresu
          */
         ?>
-        <h2>Tabela wektorów GPS:</h2>
+        <h2 class="raport">Tabela wektorów GPS:</h2>
         <table>
             <tr>
                 <th>Pkt Bazowy</th>
@@ -411,7 +403,7 @@ and open the template in the editor.
             //sprawdzenie zmiennej kontrolnej i ewentualny wydruk punktów uśrednionych
             if ($czy_jest_osnowa) {
                 ?>
-                <br/><h2>Tabela punktów uśrednionych:</h2>
+            <br/><h2 class="raport">Tabela punktów uśrednionych:</h2>
                 <table>
                     <tr>
                         <th>Nr pkt</th>
@@ -440,9 +432,9 @@ and open the template in the editor.
                             echo "<td>" . number_format($tablica_pikiet[$i][11], 2, '.', '') . "</td>"
                             . "<td>" . number_format($tablica_pikiet[$i][12], 2, '.', '') . "</td>"
                             . "<td>" . number_format($tablica_pikiet[$i][13], 3, '.', '') . "</td>";
-                            echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][11] + $tablica_pikiet[$i][11]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
-                            echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][12] + $tablica_pikiet[$i][12]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</td>";
-                            echo "<td>" . number_format(round(($tablica_pikiet[$i - 1][13] + $tablica_pikiet[$i][13]) / 2, 3, PHP_ROUND_HALF_EVEN), 3, '.', '') . "</td>";
+                            echo "<td><b>" . number_format(round(($tablica_pikiet[$i - 1][11] + $tablica_pikiet[$i][11]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</b></td>";
+                            echo "<td><b>" . number_format(round(($tablica_pikiet[$i - 1][12] + $tablica_pikiet[$i][12]) / 2, 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "</b></td>";
+                            echo "<td><b>" . number_format(round(($tablica_pikiet[$i - 1][13] + $tablica_pikiet[$i][13]) / 2, 3, PHP_ROUND_HALF_EVEN), 3, '.', '') . "</b></td>";
                             echo "<td>0.0" . random_int(0, 1) . "</td><td>0.0" . random_int(0, 1) . "</td><td>0.00" . random_int(0, 4) . "</td>"
                             . "<td>0.0" . random_int(0, 1) . "</td></tr>\n";
                         }
