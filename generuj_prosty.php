@@ -354,15 +354,14 @@ and open the template in the editor.
                             }
                             echo "</tr>\n";
                         }
-                        echo "</table>\n";
                     }
+                    echo "</table>\n";
                     /* if ($tablica_pikiet[12] > $_POST['Ymin'] and $tablica_pikiet[12] < $_POST['Ymax']) {
                       echo "</tr>";
                       $do_pliku = $tablica_pikiet[1] . ',' . $tablica_pikiet[11] . ',' . $tablica_pikiet[12] . ',' . number_format(round($tablica_pikiet[13], 2, PHP_ROUND_HALF_EVEN), 2, '.', '') . "\n";
                       $plik_eksportowy = './down/pikiety.txt';
                       file_put_contents($plik_eksportowy, $do_pliku, FILE_APPEND | LOCK_EX);
                       } */
-
                     break;
                 //generuj raport dla zakresu XY
                 case 'xy';
@@ -387,8 +386,8 @@ and open the template in the editor.
                             }
                             echo "</tr>\n";
                         }
-                        echo "</table>\n";
                     }
+                    echo "</table>\n";
                     /* if ($tablica_pikiet[11] > $_POST['Xmin'] and $tablica_pikiet[11] < $_POST['Xmax']
                       and $tablica_pikiet[12] > $_POST['Ymin'] and $tablica_pikiet[12] < $_POST['Ymax']) {
                       echo "</tr>";
@@ -400,7 +399,7 @@ and open the template in the editor.
                 default:
                     break;
             }
-            //sprawdzenie zmiennej kontrolnej i ewentualny wydruk punktów uśrednionych
+            //sprawdzenie zmiennej kontrolnej i ewentualny wydruk punktów uśrednionych.
             if ($czy_jest_osnowa) {
                 ?>
             <br/><h2 class="raport">Tabela punktów uśrednionych:</h2>
