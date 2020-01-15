@@ -8,7 +8,7 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title>Raport GPS ver. 0.0.3</title>
-        <link href="styl.css" rel="stylesheet" type="text/css"/>
+        <link href="./styl.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <?php
@@ -207,16 +207,16 @@ and open the template in the editor.
             //$tablica_pikiet[$i][7] = round(($tablica_pikiet[$i][13] - $tablica_stacji[$numer_bazy][3]) * 1000 + random_int(1, 9) * 0.1 + random_int(1, 9) * 0.01 + random_int(1, 9) * 0.001, 3);
             //wylosuj PDOP
             $tablica_pikiet[$i][8] = random_int(1, 4) . "." . random_int(0, 9);
-            //dla punktów podwójnie pomierzonych zrób zrób taki sam PDOP
+            //wylosuj ilość satelit
+            $tablica_pikiet[$i][9] = random_int(8, 17);
+            //dla punktów podwójnie pomierzonych zrób zrób taki sam PDOP, ilość satelit oraz czas pomairu 30 sekund
             if ($i > 0 && $tablica_pikiet[$i][1] == $tablica_pikiet[$i - 1][1]) {
                 $tablica_pikiet[$i][8] = $tablica_pikiet[$i - 1][8];
-            }
-            $tablica_pikiet[$i][9] = random_int(8, 17);
-            //dla punktów podwójnie pomierzonych zrób zrób tyle samo satelit
-            if ($i > 0 && $tablica_pikiet[$i][1] == $tablica_pikiet[$i - 1][1]) {
                 $tablica_pikiet[$i][9] = $tablica_pikiet[$i - 1][9];
+                $tablica_pikiet[$i][10] = 30;
+                $tablica_pikiet[$i-1][10] = 30;
             }
-            if ($tablica_pikiet[$i][16] === "osn") {
+            if ($tablica_pikiet[$i][16] == "osn") {
                 $tablica_pikiet[$i][10] = 30;
             }
             else {
@@ -229,7 +229,7 @@ and open the template in the editor.
             }
             //obliczenie odległości pomiędzy kolejnymi punktami pikietami wraz z losową wartością i wpisanie do tablicy
             if ($i > 0) {
-                $tablica_pikiet[$i][17] = round(sqrt(pow($tablica_pikiet[$i][11] - $tablica_pikiet[$i - 1][11], 2) + pow($tablica_pikiet[$i][12] - $tablica_pikiet[$i - 1][12], 2)) * 0.5) + 3 + random_int(0, 15);
+                $tablica_pikiet[$i][17] = round(sqrt(pow($tablica_pikiet[$i][11] - $tablica_pikiet[$i - 1][11], 2) + pow($tablica_pikiet[$i][12] - $tablica_pikiet[$i - 1][12], 2)) * 0.5) + 3 + random_int(3, 15);
             }
         }
         //wylosowanie rozpoczęcia godziny pomiaru i scalenie jej z podaną datą z formularza. zapisanie do tablicy
@@ -237,12 +237,11 @@ and open the template in the editor.
         //wygenerowanie daty i czasu pomiaru dla tablicy pikiet
         for ($i = 1; $i < sizeof($tablica_pikiet); $i++) {
             //jeśli osnowa to podwójnie po 30 sekund oraz czas "przemieszczenia" się na punkt
-            if ($tablica_pikiet[$i - 1][16] === "osn") {
+                if ($tablica_pikiet[$i - 1][16] === "osn") {
                 $dataczas = new DateTime($tablica_pikiet[$i - 1][3]);
                 $dataczas->add(new DateInterval('P0Y0M0DT0H0M30S'));
                 $dataczas->add(new DateInterval('P0Y0M0DT0H0M' . $tablica_pikiet[$i][17] . 'S'));
-                $tablica_pikiet[$i][3] = $dataczas->format('Y-m-d H:i:s');
-            }
+                $tablica_pikiet[$i][3] = $dataczas->format('Y-m-d H:i:s');}
             //jeśli nie osnowa to po 5 oraz czas "przemieszczenia się na punkt
             else {
                 $dataczas = new DateTime($tablica_pikiet[$i - 1][3]);
@@ -285,7 +284,7 @@ and open the template in the editor.
             
         }
         ?>
-    </table><br/>
+    </table>
     <h2 class="raport">Tabela wektorów GPS:</h2>
     <table>
         <tr>

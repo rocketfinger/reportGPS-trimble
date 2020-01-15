@@ -9,7 +9,7 @@ and open the template in the editor.
         <title>Raport GPS ver. 0.0.3</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="styl.css" rel="stylesheet" type="text/css"/>
+        <link href="./styl.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <?php
